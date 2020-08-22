@@ -1,15 +1,6 @@
 
-import keyboard
-import time
+import keyboard, ctypes
 # pylint: disable=no-member,
-
-def quit(): 
-    exit()
-
-
-
-import ctypes
-import time
 
 SendInput = ctypes.windll.user32.SendInput
 
@@ -46,30 +37,36 @@ class Input(ctypes.Structure):
 
 # Actuals Functions
 
+keyState = {}
+
 def PressKey(hexKeyCode):
+    if hexKeyCode in keyState and keyState[hexKeyCode]:
+        return False #already pressed
+    keyState[hexKeyCode] = True
     extra = ctypes.c_ulong(0)
     ii_ = Input_I()
     ii_.ki = KeyBdInput( 0, hexKeyCode, 0x0008, 0, ctypes.pointer(extra) )
     x = Input( ctypes.c_ulong(1), ii_ )
     ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
+    return True
 
 def ReleaseKey(hexKeyCode):
+    if hexKeyCode in keyState and keyState[hexKeyCode] == False:
+        return False #already released
+    keyState[hexKeyCode] = False
     extra = ctypes.c_ulong(0)
     ii_ = Input_I()
     ii_.ki = KeyBdInput( 0, hexKeyCode, 0x0008 | 0x0002, 0, ctypes.pointer(extra) )
     x = Input( ctypes.c_ulong(1), ii_ )
     ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
+    return True
 
 # button codes https://gist.github.com/tracend/912308
-#define DIK_UP              0xC8    /* UpArrow on arrow keypad */
-#define DIK_LEFT            0xCB    /* LeftArrow on arrow keypad */
-#define DIK_RIGHT           0xCD    /* RightArrow on arrow keypad */
-#define DIK_DOWN            0xD0    /* DownArrow on arrow keypad */
-
 up = 0xC8
 left = 0xCB
 right = 0xCD
 down = 0xD0
+nitro = 0x2C # Z
 
 
 
