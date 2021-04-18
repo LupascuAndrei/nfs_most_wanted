@@ -2,7 +2,7 @@
 
 ## See this AI in practice
 
-**todo**
+https://www.youtube.com/watch?v=UkYxKu2pllw
 
 
 ## Descripton
