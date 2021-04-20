@@ -51,9 +51,7 @@ processEnded = False
 def threadedWriteToFile():
     global processEnded
     while not processEnded:
-        # print('da')
         try:
-            #print('citesc')
             data = resultAviQueue.get()
             outResult.write(data)
             resultAviQueue.task_done()
